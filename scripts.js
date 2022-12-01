@@ -1,56 +1,44 @@
-let pokemon= []
-let URL="./pokemon.json"
-const cargarPokemons=async(id)=>{
-let pokemons=""
-try
-{const responce= await fetch(URL)
-console.table(responce)}
-catch(error)
-{}
-finally
-{}
-}
-let carrito=[]
 
-const ContenedorPokemons= document.getElementById('#Contenedor')
+let carrito=[]
 const carritoContenedor=document.querySelector('#carritoContenedor')
 
 document.addEventListener('DOMContentLoaded', ()=>{
     carrito=JSON.parse(localStorage.getItem('carritoPokemon')) || []
     mostrarCarrito()
 } )
-pokemons.forEach((pokemon)=>{
-   const {id, nombre, tipo, Descripcion, img} = pokemon
-   Contenedor.innerHTML += 
-`
-<div class="card" style="width: 18rem;">
-<img class="card-img-top mt-2" src="${img}" alt="Card image cap">
+const PokeCard= (pokemons) =>{
+   return`<div class="card" style="width: 18rem;">
+<img class="card-img-top mt-2" src="${pokemons.img}" alt="Card image cap">
 <div class="card-body">
-  <h5 class="card-title">${nombre}</h5>
-  <p class="card-text">${Descripcion}</p>
-  <button onclick="pickPokemon(${id})" class="btn btn-primary">pick</button>
+  <h5 class="card-title">${pokemons.nombre}</h5>
+  <p class="card-text">${pokemons.Descripcion}</p>
+  <button onclick="pickPokemon(${pokemons.id})" class="btn btn-primary">pick</button>
 </div>
 </div>
-`
-                                
-})
+`}
+
+const PokeCardError= ()=>{
+    return `<div class="card-error">
+    <h2>Error 404</h2>
+    <h3>No pudimos cargar los pokemons!!!!</h3>
+</div>`
+}
 
 function pickPokemon(id){
-    const item= pokemons.find((pokemon)=> pokemon.id === id)
+    const item= pokemons.find(pokemons=> pokemons.id === id)
     carrito.push(item)
     mostrarCarrito()
 }
 
 const mostrarCarrito=()=>{
     const modalBody=document.querySelector(".modal .modal-body")
-    modalBody.innerHTML= ''
+    
 
-    carrito.forEach((pokemon)=>{
-    const {id, nombre, tipo, img, Descripcion} = pokemon
+    carrito.forEach((pokemons)=>{
+    const {id, nombre, tipo, img} = pokemons
     modalBody.innerHTML =
     `<div class="modal-contenedor">
     <div>
-    <p>entrenador=${Entrenador}</p>
     <img class="img-fluid img-carrito" src="${img}"/>
     </div>
     <div>
@@ -66,9 +54,9 @@ const mostrarCarrito=()=>{
 }
 
 function eliminarPokemon(id){
-    const pokemonId= id
-    carrito= carrito.filter((pokemon)=> pokemon.id !== pokemonId)
-    mostrarCarrito() 
+    const pokemonId= id[0]
+    carrito= carrito.filter((pokemons)=> pokemons.id !== pokemonId)
+    mostrarCarrito()
 }
 
 function guardarStorage(){
@@ -80,7 +68,9 @@ let start= document.getElementById("start")
         swal("Tu nombre de entrenador:", {
             content: "input", id:"entrenador"})
                 .then((entrenador) => {
-                    swal(`Bienvenido: ${entrenador} !!!`);});})
-
-
-
+                    swal(`Bienvenido: ${entrenador} !!!`);
+                guardarEntrenador()});
+                })
+function guardarEntrenador(){
+    localStorage.setItem("entrenador", Json.stringify( nick ))
+}
