@@ -28,13 +28,14 @@ function pickPokemon(id){
     const item= pokemons.find(pokemons=> pokemons.id === id)
     carrito.push(item)
     mostrarCarrito()
+    tostada(`'${id} se agrego a tu equipo!`)
 }
 
 const mostrarCarrito=()=>{
     const modalBody=document.querySelector(".modal .modal-body")
     
 
-    carrito.forEach((pokemons)=>{
+carrito.forEach((pokemons)=>{
     const {id, nombre, tipo, img} = pokemons
     modalBody.innerHTML =
     `<div class="modal-contenedor">
@@ -51,6 +52,10 @@ const mostrarCarrito=()=>{
     })
     carritoContenedor.textContent= carrito.length
     guardarStorage()
+    if(carrito.length === 0){ modalBody.innerHTML=`<h1>Aun no elegiste tu pokemon!!!</h1>`}
+
+        else{console.log("algo")}
+    
 }
 
 function eliminarPokemon(id){
@@ -63,14 +68,14 @@ function guardarStorage(){
     localStorage.setItem("carritoPokemon", JSON.stringify(carrito))
 }
 
-let start= document.getElementById("start")
-    start.addEventListener("click", ()=>{
-        swal("Tu nombre de entrenador:", {
-            content: "input", id:"entrenador"})
-                .then((entrenador) => {
-                    swal(`Bienvenido: ${entrenador} !!!`);
-                guardarEntrenador()});
-                })
-function guardarEntrenador(){
-    localStorage.setItem("entrenador", Json.stringify( nick ))
-}
+const tostada= (mensaje)=>{
+    Toastify({
+
+    text: mensaje,
+    duration: 3000,
+    close: true,
+    gravity: "top", // `top` or `bottom`
+    position: "right", // `left`, `center` or `right`
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",}
+    }).showToast();}
